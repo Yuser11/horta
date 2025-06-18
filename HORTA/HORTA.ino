@@ -12,16 +12,19 @@ unsigned long millisTarefa1 = millis();
 void setup() {
   sensor.begin();
   Serial.begin(115200);
+  Serial.println("Quantas horas a planta pode ficar sem água?"); 
 }
 
 void loop() {
   // Pede para o sensor fazer a leitura
   sensor.requestTemperatures();
-  Serial.println("Quantas horas a planta pode ficar sem água?"); 
+if (Serial.available() > 0)
+{
   if (tempoSeco != 0){
     tempoSeco = Serial.parseInt();
     tempoSeco *= 60;
   }
+}
   umidade = analogRead(A0);
   Serial.println(umidade);
   // Pega o valor da temperatura em Celsius
@@ -31,20 +34,17 @@ void loop() {
   float temperaturaF = sensor.getTempFByIndex(0);
   if (umidade > 1000 )
   {
-    else if ((millis() - millisTarefa1) < 60000) {
-    minutosSeco ++;
+    if ((millis() - millisTarefa1) < 60000) {    
   } else if (millis() - millisTarefa1 > 60000) {
     millisTarefa1 = millis();
+    minutosSeco ++;
   }
-  if (minutosSeco > tempoSeco)
+  if (minutosSeco > tempoSeco){
   }
   // Mostra as informações no monitor serial
   Serial.print("Temperatura: ");
   Serial.print(temperaturaC);
-  Serial.print(" °C  |  ");
-  Serial.print(temperaturaF);
-  Serial.println(" °F");
-  Serial.println(luminosidade);
+  Serial.println(" °C");
   if (Serial.available())
   
   {
@@ -53,7 +53,5 @@ void loop() {
   // Espera 1 segundo para nova leitura
   delay(1000);
 }
-
-void LuzArtificial(){
 
 }
